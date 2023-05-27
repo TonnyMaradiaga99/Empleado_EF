@@ -1,0 +1,44 @@
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using empleadovac.Models;
+
+namespace empleadovac.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class empleadoController : ControllerBase
+    {
+        IempleadoService empleadoService;
+        public empleadoController(IempleadoService _empleadoService)
+        {
+            empleadoService = _empleadoService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> post([FromBody] empleado newempleado)
+        {
+            await empleadoService.CreateAsync(newempleado);
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(empleadoService.Get());
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] empleado updempleado)
+        {
+            await empleadoService.Update(id, updempleado);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await empleadoService.Delete(id);
+            return Ok();
+        }
+    }
+}
